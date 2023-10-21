@@ -1,0 +1,35 @@
+# Use a multi-stage build to create a lightweight production image
+FROM node:14-alpine as build-stage
+
+# Set the working directory inside the container
+WORKDIR /app
+
+# Copy the package.json and package-lock.json files for frontend dependencies
+COPY package*.json ./
+
+# Install frontend dependencies
+RUN npm install
+
+# Copy the rest of the frontend files from the client directory
+COPY . .
+
+# Build the React app
+RUN npm run build
+
+# Use a Node.js server to serve the built React app
+FROM node:14-alpine
+
+# Set the working directory inside the container
+WORKDIR /app
+
+# Copy the built app from the previous stage
+COPY --from=build-stage /app/build ./build
+
+# Install a simple HTTP server for serving the app
+RUN npm install -g serve
+
+# Expose port 80 for the HTTP server
+EXPOSE 80
+
+# Set the startup command for serving the app
+CMD ["serve", "-s", "build", "-l", "80"]

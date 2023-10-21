@@ -1,0 +1,29 @@
+version: '3'
+services:
+  backend:
+    build:
+      context: .  # Build context is the current directory
+      dockerfile: Dockerfile.backend
+    ports:
+      - "5000:5000"  # Map host port to container port
+    environment:
+      NODE_ENV: production  # Set the environment as production
+    depends_on:
+      - database  # Wait for the database container to start
+
+  frontend:
+    build:
+      context: ./client  # Build context is the client directory
+      dockerfile: Dockerfile.frontend
+    ports:
+      - "80:80"  # Map host port to container port
+
+  database:
+    image: mongo:latest  # Use the official MongoDB image
+    ports:
+      - "27017:27017"  # Map host port to container port
+    volumes:
+      - mongo-data:/data/db  # Use a Docker volume for database persistence
+
+volumes:
+  mongo-data:  # Define the Docker volume for MongoDB data persistence
