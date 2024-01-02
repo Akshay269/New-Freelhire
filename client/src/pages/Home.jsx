@@ -42,7 +42,6 @@ We believe in Innovation`}
                   delay={50}
                 />
                 <br />
-                {/* <Typewriter text=" " delay={50}/> */}
               </h1>
             </div>
           </div>

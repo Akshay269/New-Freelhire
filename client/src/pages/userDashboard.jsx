@@ -79,8 +79,9 @@ export default function DashboardUser() {
     setErrorMessage("An Error occured with your payment ");
   };
 
-  const handleChange = async (e) => {
-    e.preventDefault();
+  //Form Submission me Trigger hoga
+const handleChange = async (e) => {
+    e.preventDefault();//This is commonly used in form submission handlers to prevent the default form submission, which would cause a page reload.
 
     let obj = {
       formid: formid,
@@ -89,6 +90,10 @@ export default function DashboardUser() {
       form_budget: budget,
     };
 
+    //Async/Await and API Call:
+//The function calls an asynchronous function named edit_form with the obj data. The use of async suggests that edit_form returns a promise, and await is used to wait for the promise to resolve.
+//Handling the Result:
+//Once the asynchronous operation is complete, the .then() block is used to handle the result (data). In this case, the data is logged to the console.
     edit_form(obj).then((data) => {
       console.log(data);
       window.location.reload();
@@ -121,6 +126,7 @@ export default function DashboardUser() {
       });
     }
   }, []);
+  // this useEffect hook is responsible for checking if a user is logged in by verifying the presence of a user token in the local storage. If a user is logged in, it authenticates the user, fetches user details and forms, and updates the component state accordingly. If a user is not logged in or authentication fails, it updates the state to reflect that the user is not logged in.
 
   return (
     <>

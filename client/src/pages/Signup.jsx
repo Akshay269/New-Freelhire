@@ -19,6 +19,7 @@ export default function Signup() {
   const [contact, setContact] = useState("");
   let [userType, setUserType] = useState("admin");
 
+  //Register Handlechange
   const handleChange = async (e) => {
     e.preventDefault();
 
@@ -47,6 +48,7 @@ export default function Signup() {
     setPassword("");
   };
 
+  //Login Handle Change
   const login_handleChange = async (e) => {
     e.preventDefault();
     let login_userType = document.getElementById("login_type").value;
