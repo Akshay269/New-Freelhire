@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
 import Navbar from "../components/navbar";
-import { useNavigate } from "react-router-dom";
+
 import {
   auth_admin,
   get_forms,
@@ -12,12 +11,10 @@ import "../styles/index.css";
 import Footer from "../components/Footer";
 
 export default function DashboardAdmin() {
-  const navigate = useNavigate();
   let [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false);
   let [name, setName] = useState("");
   let [email, setEmail] = useState("");
   let [forms, setForms] = useState([]);
-  let [action, setAction] = useState("");
   let [accepted, setAccepted] = useState(false);
   let [rejected, setRejected] = useState(false);
   let [awaiting, setAwaiting] = useState(true);

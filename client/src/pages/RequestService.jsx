@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import Navbar from "../components/navbar";
 import { useNavigate } from "react-router-dom";
 
@@ -11,13 +11,10 @@ export default function DashboardApplicant() {
   let [budget, setBudget] = useState("");
   let [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
   let [userId, setUserId] = useState("");
-  let [image, setImage] = useState(null);
-  let [selectedFiles, setSelectedFiles] = useState(undefined);
 
   const navigate = useNavigate();
 
-  const fileObj = [];
-  const fileArray = [];
+
 
   useEffect(() => {
     if (localStorage.getItem("user_token")) {

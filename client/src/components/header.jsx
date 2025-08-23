@@ -1,8 +1,8 @@
 import MenuOutlined from "@mui/icons-material/Menu";
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
-import logopic from "../assets/logo.png";
+import logopic from "../assets/images/logo.png";
 import MenuItems from "./MenuItems";
 
 const Header = () => {

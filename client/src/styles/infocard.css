@@ -12,9 +12,8 @@
   justify-content: center;
 }
 .left {
-  background-image: url(../assets/infocard.jpeg);
+  background-image: url(../assets/images/infocard.jpeg);
   border-radius: 8px;
-  /* box-shadow: -10px -10px 8px rgb(69, 69, 69); */
 }
 .tempimg{
   width: 1000px;

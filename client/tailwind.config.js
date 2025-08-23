@@ -20,8 +20,8 @@ module.exports = {
 
     extend: {
       backgroundImage: {
-        "hero-image": 'url("./components/assets/bg.png")',
-        "alt-image": 'url("./components/assets/earth.jpg")',
+        "hero-image": 'url("./components/assets/images/bg.png")',
+        "alt-image": 'url("./components/assets/images/earth.jpg")',
       },
     },
   },

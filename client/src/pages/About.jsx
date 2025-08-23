@@ -1,8 +1,7 @@
-import React from "react";
+
 import Navbar from "../components/navbar";
 import "../styles/index.css";
-import about1 from "../assets/about1.svg";
-import aboutus from "../assets/aboutimg.png";
+import aboutus from "../assets/images/aboutimg.png";
 import Footer from "../components/Footer";
 
 

@@ -1,12 +1,10 @@
 import Navbar from "../components/navbar";
-import wave1 from "../assets/bg.jpg";
+import wave1 from "../assets/images/bg.jpg";
 import InfoCard from "../components/InfoCard";
 import Footer from "../components/Footer";
 import Typewriter from "../utils/TypeWriter";
 
 export default function Home() {
-
-
   return (
     <>
       <Navbar />

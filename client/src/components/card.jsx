@@ -1,6 +1,4 @@
-import React from "react";
-import useState from "react-dom";
-import cardbg from "../../assets/cardbg.jpg";
+
 
 import "./style.css";
 const Card = (props) => {

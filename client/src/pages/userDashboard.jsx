@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
 import Navbar from "../components/navbar";
 import Footer from "../components/Footer";
 import { useNavigate } from "react-router-dom";
@@ -10,7 +9,6 @@ import {
   get_forms,
   get_user_det_by_id,
   delete_form,
-  submit_form,
   get_forms_by_formid,
   edit_form,
 } from "../controllers/user";
@@ -22,7 +20,6 @@ export default function DashboardUser() {
   let [name, setName] = useState("");
   let [email, setEmail] = useState("");
   let [forms, setForms] = useState([]);
-  let [isOpen, setIsOpen] = useState(false);
   let [isEditable, setIsEditable] = useState(false);
   let [title, setTitle] = useState("");
   let [desc, setDesc] = useState("");
@@ -34,7 +31,6 @@ export default function DashboardUser() {
   const [ErrorMessage, setErrorMessage] = useState("");
   const [orderID, setOrderID] = useState(false);
   const [form_budget_pay, setForm_budget_pay] = useState();
-  const [popup, setIsPopup] = useState(false);
 
   const handlePay = async (e) => {
     e.preventDefault();
@@ -81,7 +77,7 @@ export default function DashboardUser() {
 
   //Form Submission me Trigger hoga
 const handleChange = async (e) => {
-    e.preventDefault();//This is commonly used in form submission handlers to prevent the default form submission, which would cause a page reload.
+    e.preventDefault();
 
     let obj = {
       formid: formid,
@@ -90,10 +86,7 @@ const handleChange = async (e) => {
       form_budget: budget,
     };
 
-    //Async/Await and API Call:
-//The function calls an asynchronous function named edit_form with the obj data. The use of async suggests that edit_form returns a promise, and await is used to wait for the promise to resolve.
-//Handling the Result:
-//Once the asynchronous operation is complete, the .then() block is used to handle the result (data). In this case, the data is logged to the console.
+   
     edit_form(obj).then((data) => {
       console.log(data);
       window.location.reload();
@@ -126,7 +119,7 @@ const handleChange = async (e) => {
       });
     }
   }, []);
-  // this useEffect hook is responsible for checking if a user is logged in by verifying the presence of a user token in the local storage. If a user is logged in, it authenticates the user, fetches user details and forms, and updates the component state accordingly. If a user is not logged in or authentication fails, it updates the state to reflect that the user is not logged in.
+
 
   return (
     <>

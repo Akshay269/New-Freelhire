@@ -1,12 +1,12 @@
-import React from "react";
+
 import Navbar from "../components/navbar";
 import "../styles/index.css";
 import Footer from "../components/Footer";
 import TeamCard from "../components/TeamCard";
-import logoDes from "../assets/logo-design.png";
-import graphicDes from "../assets/graphic-design.jpg";
-import digiMark from "../assets/digital-marketing.png";
-import contentCreation from "../assets/content-creation.png";
+import logoDes from "../assets/images/logo-design.png";
+import graphicDes from "../assets/images/graphic-design.jpg";
+import digiMark from "../assets/images/digital-marketing.png";
+import contentCreation from "../assets/images/content-creation.png";
 
 
 export default function Services() {

@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 import "../styles/signup.css";
 import Navbar from "../components/navbar";
-import about1 from "../assets/about1.svg";
+import about1 from "../assets/images/about1.svg";
 import Footer from "../components/Footer";
 import {  useNavigate } from "react-router-dom";
 import { login_admin } from "../controllers/admin";

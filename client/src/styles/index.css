@@ -16,12 +16,12 @@ body {
   font-family: "Prompt", sans-serif;
 }
 #hero {
-  background-image: url(../../src/assets/bg.jpg);
+  background-image: url(../../src/assets/images/bg.jpg);
   background-color: #c6c7c7;
   transition: ease-in-out 1s;
 }
 .aboutbg {
-  background-image: url(../assets/about1.svg);
+  background-image: url(../assets/images/about1.svg);
   background-repeat: no-repeat;
   background-size: cover;
 }
@@ -121,7 +121,7 @@ body {
 }
 
 .servicesbg {
-  background-image: url(../assets/about1.svg);
+  background-image: url(../assets/images/about1.svg);
   background-repeat: no-repeat;
   background-size: cover;
 }
@@ -192,7 +192,7 @@ body {
 }
 
 .policybg {
-  background-image: url(../assets/about1.svg);
+  background-image: url(../assets/images/about1.svg);
   background-repeat: no-repeat;
   background-size:cover;
   /* object-fit:; */

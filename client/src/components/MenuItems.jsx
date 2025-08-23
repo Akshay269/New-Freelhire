@@ -1,5 +1,4 @@
 import Close from "@mui/icons-material/Close";
-import React from "react";
 import { Link } from "react-router-dom";
 
 const MenuItems = ({ showMenu, active }) => {
