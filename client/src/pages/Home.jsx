@@ -1,4 +1,4 @@
-import Navbar from "../components/navbar";
+import Navbar from "../components/Navbar";
 import wave1 from "../assets/images/bg.jpg";
 import InfoCard from "../components/InfoCard";
 import Footer from "../components/Footer";

@@ -1,83 +1,65 @@
-import "../styles/footer.css";
 import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
-    <>
-      <div class="footer mt-auto">
-        <div class="inner-footer">
-          <div class="footer-items">
-            <h1>Freelhire</h1>
-            <p>Description of any product or motto of the company.</p>
-          </div>
-
-          <div class="footer-items">
-            <h3 className="text-2xl">Quick Links</h3>
-            <div class="border1"></div>
-            <ul className="footer-ul text-xl">
-              <a href="#">
-                <li>Home</li>
-              </a>
-              <a href="#">
-                <li>Search</li>
-              </a>
-              <a href="#">
-                <li>Contact</li>
-              </a>
-              <a href="#">
-                <li>About</li>
-              </a>
-            </ul>
-          </div>
-
-          <div class="footer-items">
-            <h3 className="text-2xl">Services</h3>
-            <div class="border1"></div>
-            <ul className="footer-ul text-xl">
-              <a href="/services">
-                <li>
-                  <Link to="/services">Digital Marketing</Link>
-                </li>
-              </a>
-              <a href="/services">
-                <li>
-                  <Link to="/services">Content Creation</Link>
-                </li>
-              </a>
-              <a href="/services">
-                <li>
-                  <Link to="/services">Logo Designing</Link>
-                </li>
-              </a>
-              <a href="/services">
-                <li>
-                  <Link to="/services">Web Development</Link>
-                </li>
-              </a>
-              <a href="/services">
-                <li>
-                  <Link to="/services">Graphic Designing</Link>
-                </li>
-              </a>
-            </ul>
-          </div>
-
-          <div class="footer-items">
-            <h2 className="text-2xl">Contact us</h2>
-            <div class="border1"></div>
-            <ul className="footer-ul text-xl">
-              <li className="flex items-center">
-                <i class="fa fa-envelope" aria-hidden="true"></i>
-                <a href="mailto:support@Freelhire.com">support@Freelhire.com</a>
-              </li>
-            </ul>
-
-          </div>
+    <footer className="w-full bg-[#00121b] text-white">
+      <div className="max-w-6xl mx-auto flex flex-wrap justify-between gap-8 px-4 py-8">
+        {/* Company Info */}
+        <div className="flex-1 min-w-[220px]">
+          <h1 className="text-2xl font-bold mb-2">Freelhire</h1>
+          <p className="text-base leading-relaxed">
+            Connecting talent with opportunity — empowering freelancers and
+            businesses worldwide.
+          </p>
         </div>
 
-        <div class="footer-bottom">Copyright &copy; Freelhire</div>
+        {/* Quick Links */}
+        <div className="flex-1 min-w-[220px]">
+          <h3 className="text-xl font-semibold mb-2">Quick Links</h3>
+          <div className="h-[3px] w-10 bg-red-600 mb-4"></div>
+          <ul className="space-y-2 text-lg">
+            <li><Link className="hover:text-red-600 transition" to="/">Home</Link></li>
+            <li><Link className="hover:text-red-600 transition" to="/search">Search</Link></li>
+            <li><Link className="hover:text-red-600 transition" to="/contact">Contact</Link></li>
+            <li><Link className="hover:text-red-600 transition" to="/about">About</Link></li>
+          </ul>
+        </div>
+
+        {/* Services */}
+        <div className="flex-1 min-w-[220px]">
+          <h3 className="text-xl font-semibold mb-2">Services</h3>
+          <div className="h-[3px] w-10 bg-red-600 mb-4"></div>
+          <ul className="space-y-2 text-lg">
+            <li><Link className="hover:text-red-600 transition" to="/services">Digital Marketing</Link></li>
+            <li><Link className="hover:text-red-600 transition" to="/services">Content Creation</Link></li>
+            <li><Link className="hover:text-red-600 transition" to="/services">Logo Designing</Link></li>
+            <li><Link className="hover:text-red-600 transition" to="/services">Web Development</Link></li>
+            <li><Link className="hover:text-red-600 transition" to="/services">Graphic Designing</Link></li>
+          </ul>
+        </div>
+
+        {/* Contact */}
+        <div className="flex-1 min-w-[220px]">
+          <h3 className="text-xl font-semibold mb-2">Contact Us</h3>
+          <div className="h-[3px] w-10 bg-red-600 mb-4"></div>
+          <ul className="space-y-2 text-lg">
+            <li className="flex items-center gap-2">
+              <i className="fa fa-envelope"></i>
+              <a
+                className="hover:text-red-600 transition"
+                href="mailto:support@Freelhire.com"
+              >
+                support@Freelhire.com
+              </a>
+            </li>
+          </ul>
+        </div>
       </div>
-    </>
+
+      <div className="bg-[#000e16] text-center text-sm py-4">
+        &copy; {new Date().getFullYear()} Freelhire. All Rights Reserved.
+      </div>
+    </footer>
   );
 };
 
