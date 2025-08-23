@@ -1,6 +1,4 @@
-import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-
 import Home from "../pages/Home";
 import About from "../pages/About";
 import Team from "../pages/Team";
@@ -19,7 +17,7 @@ export default function Router() {
           <Route exact path="/about" element={<About />} />
           <Route exact path="/services" element={<Services />} />
           <Route exact path="/team" element={<Team />} />
-          <Route exact path="/SignUp" element={<Signup />} />
+          <Route exact path="/signup" element={<Signup />} />
           <Route exact path="/userdashboard" element={<UserDashboard />} />
           <Route exact path="/admindashboard" element={<AdminDashboard />} />
           <Route exact path="/requestservice" element={<RequestService />} />
