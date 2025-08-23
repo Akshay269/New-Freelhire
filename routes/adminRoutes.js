@@ -2,39 +2,37 @@ const express = require("express");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
-
-const Admin = require("../models/Admin");
-const User = require("../models/User");
-const Form = require("../models/Form");
+const { PrismaClient } = require("@prisma/client");
+const prisma = new PrismaClient();
 
 router.post("/signup", async (req, res) => {
   try {
     const { admin_name, admin_email, admin_password } = req.body;
 
-    // put all info
     if (!admin_name || !admin_email || !admin_password) {
-      res.status(400);
-      throw new err("Please add all fields");
+      return res.status(400).json({ message: "Please add all fields" });
     }
 
-    // Check if the user already exists
-    let adminexist = await Admin.findOne({ admin_email });
-    if (adminexist) {
+    // Check if admin exists
+    const adminExist = await prisma.admin.findUnique({
+      where: { admin_email },
+    });
+
+    if (adminExist) {
       return res.status(400).json({ message: "Admin already exists" });
     }
 
-    // Hash the password
-    const salt = await bcrypt.genSalt(10);
-    const hashedpassword = await bcrypt.hash(admin_password, salt);
+    // Hash password
+    const hashedPassword = await bcrypt.hash(admin_password, 10);
 
-    const admin = new Admin({
-      admin_name,
-      admin_email,
-      admin_password: hashedpassword,
+    // Create admin
+    await prisma.admin.create({
+      data: {
+        admin_name,
+        admin_email,
+        admin_password: hashedPassword,
+      },
     });
-
-    // Save the user to the database
-    await admin.save();
 
     res.status(200).json({ message: "Admin created successfully" });
   } catch (err) {
@@ -46,88 +44,44 @@ router.post("/signup", async (req, res) => {
 router.post("/login", async (req, res) => {
   try {
     const { admin_email, admin_password } = req.body;
-    // Check if the client exists
-    const admin = await Admin.findOne({ admin_email: admin_email });
+
+    const admin = await prisma.admin.findUnique({
+      where: { admin_email },
+    });
 
     if (!admin) {
-      return res.status(400).json({ msg: "Invalid credentials" });
+      return res.status(400).json({ message: "Invalid credentials" });
     }
-    // Compare the passwords
-    const isMatch = await bcrypt.compare(admin_password, admin.admin_password);
 
+    const isMatch = await bcrypt.compare(admin_password, admin.admin_password);
     if (!isMatch) {
       return res.status(400).json({ message: "Invalid credentials" });
     }
 
-    // Check if the user is a client
-    // if (!admin.isAdmin) {
-    //   return res.status(401).json({ msg: "Unauthorized" });
-    // }
+    const token = jwt.sign({ id: admin.id }, process.env.JWT_SECRET);
 
-    // Sign the JWT
-    const token = jwt.sign({ id: admin._id }, process.env.JWT_SECRET);
-
-    return res.json({ message: "sucess", token: token, tag: true });
+    return res.json({ message: "success", token, tag: true });
   } catch (err) {
     console.error(err.message);
-    res.status(500).send("Server error");
+    res.status(500).send("Server Error");
   }
 });
 
 // Authentication route
 router.post("/auth", (req, res) => {
-  // Get the token from the authorization header
   const token = req.body.token;
-
   try {
-    // Verify the token using the secret key
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-    // Get the user ID from the decoded token
     const adminId = decoded.id;
-
-    // Return the protected data
     return res.json({ message: `Authenticated user: ${adminId}`, tag: true });
   } catch (err) {
-    // Return an error if the token is invalid
     res.status(401).json({ error: "You are not authenticated" });
   }
 });
 
-//Edit User Details checked
-// router.put("/edit_admin/:id", async (req, res) => {
-//   try {
-//     // Find the user by ID and update the details
-//     const admin = await Admin.findByIdAndUpdate(req.params.id, req.body, {
-//       new: true,
-//     });
-
-//     // Save the updated user to the database
-//     await admin.save();
-
-//     // Return a success message
-//     res.send({ message: "Admin updated successfully" });
-//   } catch (error) {
-//     // Return an error message
-//     res.status(400).send({ error: "Error updating admin" });
-//   }
-// });
-
-//get user dets
-// router.get("/user/:id",async(req,res) => {
-//   try {
-//     const user=await User.find(req.params.)
-
-//   } catch (err) {
-//     res.status(500).json({ message: err.message });
-//   }
-// })
-
-//allusers
 router.get("/users", async (req, res) => {
   try {
-    const users = await User.find();
-    // console.log(forms)
+    const users = await prisma.user.findMany();
     res.json(users);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -135,25 +89,21 @@ router.get("/users", async (req, res) => {
 });
 
 router.post("/admindets", async (req, res) => {
-  const id = req.body.id;
-  let admin = {};
-  admin = await Admin.findOne({ _id: id });
-  if (admin) {
-    return res.json({
-      message: admin,
-      tag: true,
-    });
-  }
-  return res.json({
-    message: admin,
-    tag: false,
+  const { id } = req.body;
+
+  const admin = await prisma.admin.findUnique({
+    where: { id: Number(id) },
   });
+
+  if (admin) {
+    return res.json({ message: admin, tag: true });
+  }
+  return res.json({ message: null, tag: false });
 });
 
-//get all forms
 router.post("/forms", async (req, res) => {
   try {
-    const forms = await Form.find();
+    const forms = await prisma.form.findMany();
     res.json(forms);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -162,36 +112,25 @@ router.post("/forms", async (req, res) => {
 
 router.put("/action_by_admin", async (req, res) => {
   try {
-    let {action, id} = req.body;
+    const { action, id } = req.body;
 
+    let status = "Pending";
+    if (action === "accept") status = "Accepted";
+    if (action === "deny") status = "Rejected";
 
-    const form = await Form.findOne({_id: id});
-    form.action = action;
-    // console.log(action);
-
-    if(action == "accept"){
-      form.status = "Accepted";
-    }
-    else if(action == "deny"){
-      form.status = "Rejected";
-    }
-    else{
-      form.status = "Pending"
-    }
-
-    form.save(function (error, document) {
-      if (error) {
-        console.error(error);
-        return res.json({ message: "try again", tag: false });
-      }
-      return res.json({ message: form, tag: true });
+    const form = await prisma.form.update({
+      where: { id: Number(id) },
+      data: {
+        action,
+        status,
+      },
     });
+
+    return res.json({ message: form, tag: true });
   } catch (err) {
+    console.error(err.message);
     res.status(500).json({ message: err.message });
   }
 });
-
-
-
 
 module.exports = router;

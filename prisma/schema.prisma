@@ -1,0 +1,51 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id            Int      @id @default(autoincrement())
+  user_name     String   @unique
+  user_email    String   @unique
+  user_password String
+  isAdmin       Boolean  @default(false)
+  user_contact  String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Form {
+  id                Int  @id @default(autoincrement())
+  form_id           String? // Optional because not marked as required in Mongoose
+  form_title        String // required: true
+  form_desc         String // required: true
+  images            String[] // Array of strings for multiple images
+  form_budget       String // required: true
+  user_id           String // required: true (you might later convert this to a relation)
+  form_user_name    String? // Optional
+  form_user_contact String? // Optional
+  status            String   @default("Pending")
+  action            String? // Optional
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
+model Admin {
+  id             Int      @id @default(autoincrement())
+  admin_name     String
+  admin_email    String   @unique
+  admin_password String
+  isAdmin        Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}

@@ -6,12 +6,12 @@ var bcrypt = require("bcryptjs");
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: false }));
 
-const User = require("../models/User");
-const Form = require("../models/Form");
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
-
+const { PrismaClient } = require("@prisma/client");
+const prisma = new PrismaClient();
+const shortid = require("shortid");
 
 
 // set up storage for uploaded files
@@ -38,31 +38,30 @@ router.post("/signup", async (req, res) => {
   try {
     const { user_name, user_email, user_contact, user_password } = req.body;
 
-    // put all info
     if (!user_name || !user_email || !user_contact || !user_password) {
-      res.status(400);
-      throw new err("Please add all fields");
+      return res.status(400).json({ message: "Please add all fields" });
     }
 
-    // Check if the user already exists
-    let userexist = await User.findOne({ user_email });
-    if (userexist) {
+    // Check if user exists
+    const userExist = await prisma.user.findUnique({
+      where: { user_email },
+    });
+    if (userExist) {
       return res.status(400).json({ message: "User already exists" });
     }
 
-    // Hash the password
-    const salt = await bcrypt.genSalt(10);
-    const hashedpassword = await bcrypt.hash(user_password, salt);
+    // Hash password
+    const hashedPassword = await bcrypt.hash(user_password, 10);
 
-    const user = new User({
-      user_name,
-      user_email,
-      user_contact,
-      user_password: hashedpassword,
+    // Create user
+    await prisma.user.create({
+      data: {
+        user_name,
+        user_email,
+        user_contact,
+        user_password: hashedPassword,
+      },
     });
-
-    // Save the user to the database
-    await user.save();
 
     res.status(200).json({ message: "User created successfully" });
   } catch (err) {
@@ -75,42 +74,39 @@ router.post("/signup", async (req, res) => {
 router.post("/login", async (req, res) => {
   try {
     const { user_email, user_password } = req.body;
-    // Check if the client exists
-    const user = await User.findOne({ user_email: user_email });
+
+    const user = await prisma.user.findUnique({
+      where: { user_email },
+    });
 
     if (!user) {
       return res.status(400).json({ message: "Invalid credentials" });
     }
-    // Compare the passwords
-    const isMatch = await bcrypt.compare(user_password, user.user_password);
 
+    const isMatch = await bcrypt.compare(user_password, user.user_password);
     if (!isMatch) {
       return res.status(400).json({ message: "Invalid credentials" });
     }
 
-    // Check if the user is a client
     if (user.isAdmin) {
       return res.status(401).json({ message: "Unauthorized" });
     }
 
-    // Sign the JWT
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
-
-    return res.json({ message: "success", token: token, tag: true });
+    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET);
+    res.json({ message: "success", token, tag: true });
   } catch (err) {
     console.error(err.message);
-    res.status(500).send("Server error");
+    res.status(500).send("Server Error");
   }
 });
 
-// Authentication route
 router.post("/auth", (req, res) => {
   // Get the token from the authorization header
   const token = req.body.token;
 
   try {
     // Verify the token using the secret key
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET,);
 
     // Get the user ID from the decoded token
     const userId = decoded.id;
@@ -123,169 +119,91 @@ router.post("/auth", (req, res) => {
   }
 });
 
-//Edit User Details checked
-// router.put("/edit_user/:id", async (req, res) => {
-//   try {
-//     // Find the user by ID and update the details
-//     const user = await User.findByIdAndUpdate(req.params.id, req.body, {
-//       new: true,
-//     });
-
-//     // Save the updated user to the database
-//     await user.save();
-
-//     // Return a success message
-//     res.send({ message: "User updated successfully" });
-//   } catch (error) {
-//     // Return an error message
-//     res.status(400).send({ error: "Error updating user" });
-//   }
-// });
-const shortid = require("shortid");
-function generateFormUserId() {
-  return shortid.generate();
-}
 //Submit Form checked
 router.post("/submit_form", upload.array("images", 10), async (req, res) => {
-  const token = req.body.token;
-  const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
-  const userId = decodedToken.id;
-  
-  const temp_user_name = await User.findOne({_id: userId});
- 
-  let { form_title, form_desc, form_budget, form_id, user_id } = req.body;
-  form_id = generateFormUserId();
+  try {
+    const token = req.body.token;
+    const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+    const userId = decodedToken.id;
 
-  const retform = new Form({
-    form_id,
-    form_title,
-    form_desc,
-    form_budget,
-    user_id: userId,
-    form_user_name: temp_user_name.user_name,
-    form_user_contact: temp_user_name.user_contact
-  });
+    const temp_user = await prisma.user.findUnique({
+      where: { id: userId },
+    });
 
-  console.log(retform);
+    const form_id = shortid.generate();
+    await prisma.form.create({
+      data: {
+        form_id,
+        form_title: req.body.form_title,
+        form_desc: req.body.form_desc,
+        form_budget: req.body.form_budget,
+        user_id: userId,
+        form_user_name: temp_user.user_name,
+        form_user_contact: temp_user.user_contact,
+        images: req.files.map((file) => file.filename),
+      },
+    });
 
-  // // Save the new user forms to the database
-
-  retform.save(function (error, document) {
-    if (error) {
-      console.error(error);
-      return res.json({ message: "try again", tag: false });
-    }
-    return res.json({ message: "Form submit Success", tag: true });
-  });
+    res.json({ message: "Form submit Success", tag: true });
+  } catch (err) {
+    console.error(err);
+    res.json({ message: "try again", tag: false });
+  }
 });
 
-// Edit form dena hki nhi??
-
-// Edit form
-// router.route('/forms/edit/:id')
-//   // Display the edit form
-//   .get(async (req, res) => {
-//     try {
-//       // Find the form by ID and render the edit form view
-//       const form = await Form.findById({form_id:req.params.id});
-//       if (!form) {
-//         return res.status(404).json({ message: 'Form not found' });
-//       }
-//       res.render('edit-form', { form });
-//     } catch (err) {
-//       res.status(500).json({ message: err.message });
-//     }
-//   })
-//   // Update the form data
-//   .put(async (req, res) => {
-//     try {
-//       // Find the form by ID and update the fields
-//       const form = await Form.findById(req.params.id);
-//       if (!form) {
-//         return res.status(404).json({ message: 'Form not found' });
-//       }
-//       form.form_title = req.body.form_title;
-//       form.form_desc = req.body.form_desc;
-//       form.form_budget = req.body.form_budget;
-
-//       // Save the updated form data to MongoDB
-//       const updatedForm = await form.save();
-
-//       res.redirect('/forms/' + updatedForm.id);
-//     } catch (err) {
-//       res.status(500).json({ message: err.message });
-//     }
-//   });
-
-// //Delete form ye bhi dena h ki nhi??
 router.delete("/form/delete", async (req, res) => {
   try {
-    // Delete the form with the specified form_id
-    const { _id } = req.body;
-    const deletedForm = await Form.deleteOne({ _id });
+    const { id } = req.body;
 
-    // Check if a form was deleted
-    if (!deletedForm.deletedCount) {
-      throw new Error(`Form with ID '${_id}' not found`);
-    }
+    await prisma.form.delete({
+      where: { id: Number(id) },
+    });
 
-    res.status(200).json({ message: `Form with ID '${_id}' will be deleted` });
+    res.status(200).json({ message: `Form with ID '${id}' deleted` });
   } catch (err) {
     res.status(400).json({ message: err.message });
   }
 });
 
 router.put("/form/edit", async (req, res) => {
-
   try {
-    let { formid, form_title, form_desc, form_budget } = req.body;
+    const { formid, form_title, form_desc, form_budget } = req.body;
 
-  const form = await Form.findOne({_id: formid});
-  console.log(form);
+    const form = await prisma.form.update({
+      where: { id: Number(formid) },
+      data: {
+        form_title,
+        form_desc,
+        form_budget,
+      },
+    });
 
-  form.form_title = form_title,
-    form.form_desc = form_desc,
-    form.form_budget = form_budget;
-
-  form.save(function (error, document) {
-    if (error) {
-      console.error(error);
-      return res.json({ message: "try again", tag: false });
-    }
-    
-    return res.json({ message: form, tag: true });
-  });
-
-  } catch(err) {
-    return res.json(err);
+    res.json({ message: form, tag: true });
+  } catch (err) {
+    console.error(err);
+    res.json({ message: "try again", tag: false });
   }
-  
 });
 
 router.post("/userdets", async (req, res) => {
-  const id = req.body.id;
-  let user = {};
-  user = await User.findOne({ _id: id });
-  if (user) {
-    return res.json({
-      message: user,
-      tag: true,
-    });
-  }
-  return res.json({
-    message: user,
-    tag: false,
+  const { id } = req.body;
+  const user = await prisma.user.findUnique({
+    where: { id: Number(id) },
   });
+
+  if (user) {
+    return res.json({ message: user, tag: true });
+  }
+  res.json({ message: null, tag: false });
 });
-// Get all forms submitted by user with id
+
 router.post("/forms_by_user", async (req, res) => {
   try {
-    const id = req.body.id;
-    const forms = await Form.find({ user_id: id });
-    // console.log(forms)
-    if (forms) {
-      return res.json({ message: forms, tag: true });
-    }
+    const { id } = req.body;
+    const forms = await prisma.form.findMany({
+      where: { user_id: Number(id) },
+    });
+    res.json({ message: forms, tag: true });
   } catch (err) {
     res.status(500).json({ message: err.message, tag: false });
   }
@@ -293,11 +211,11 @@ router.post("/forms_by_user", async (req, res) => {
 
 router.post("/forms_by_id", async (req, res) => {
   try {
-    const id = req.body.id;
-    const forms = await Form.find({ _id: id });
-    if (forms) {
-      return res.json({ message: forms, tag: true });
-    }
+    const { id } = req.body;
+    const form = await prisma.form.findUnique({
+      where: { id: Number(id) },
+    });
+    res.json({ message: form, tag: !!form });
   } catch (err) {
     res.status(500).json({ message: err.message, tag: false });
   }
