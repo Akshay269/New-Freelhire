@@ -13,7 +13,6 @@ import Footer from "./components/Footer";
 export default function App() {
   return (
     <>
-      <BrowserRouter>
         <Navbar />
         <Routes>
           <Route exact path="/" element={<Home />} />
@@ -27,7 +26,6 @@ export default function App() {
          
         </Routes>
         <Footer />
-      </BrowserRouter>
     </>
   );
 }
