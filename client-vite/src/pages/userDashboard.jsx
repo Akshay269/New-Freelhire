@@ -10,7 +10,6 @@ import {
   get_forms_by_formid,
   edit_form,
 } from "../controllers/user";
-import "../styles/index.css";
 
 export default function DashboardUser() {
   const navigate = useNavigate();
@@ -25,9 +24,8 @@ export default function DashboardUser() {
   let [formid, setFormId] = useState("");
   let [isPaying, setIsPaying] = useState(false);
   const [show, setShow] = useState(false);
-  const [success, setSuccess] = useState(false);
-  const [ErrorMessage, setErrorMessage] = useState("");
-  const [orderID, setOrderID] = useState(false);
+  // const [ setSuccess] = useState(false);
+  const [ setOrderID] = useState(false);
   const [form_budget_pay, setForm_budget_pay] = useState();
 
   const handlePay = async (e) => {
@@ -61,17 +59,14 @@ export default function DashboardUser() {
       });
   };
 
-  const onApprove = (data, actions) => {
-    return actions.order.capture().then(function (details) {
-      const { payer } = details;
-      setSuccess(true);
-    });
-  };
+  // const onApprove = (data, actions) => {
+  //   return actions.order.capture().then(function (details) {
+  //     const payer = details.payer;
+  //     setSuccess(true);
+  //   });
+  // };
 
-  //capture likely error
-  const onError = (data, actions) => {
-    setErrorMessage("An Error occured with your payment ");
-  };
+
 
   //Form Submission me Trigger hoga
 const handleChange = async (e) => {
@@ -160,7 +155,7 @@ const handleChange = async (e) => {
                         <PayPalButtons
                           style={{ layout: "vertical" }}
                           createOrder={createOrder}
-                          onApprove={onApprove}
+                          // onApprove={onApprove}
                         />
                       ) : null}
                       <div className="flex flex-col justify-center items-center p-2 gap-3">

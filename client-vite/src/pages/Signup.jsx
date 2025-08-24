@@ -1,5 +1,4 @@
 import { useState } from "react";
-import "../styles/signup.css";
 import about1 from "../assets/images/about1.svg";
 import { useNavigate } from "react-router-dom";
 import { login_admin, register_admin } from "../controllers/admin";

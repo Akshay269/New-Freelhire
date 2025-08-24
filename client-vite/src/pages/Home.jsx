@@ -6,8 +6,7 @@ import Typewriter from "../utils/TypeWriter";
 export default function Home() {
   return (
     <>
-     
-
+    
       <div
         className="w-full h-screen bg-cover bg-center flex flex-col items-center px-4"
         id="hero"

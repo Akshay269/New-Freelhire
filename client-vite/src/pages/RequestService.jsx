@@ -2,14 +2,14 @@ import  { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { auth_user, submit_form } from "../controllers/user";
-import "../styles/index.css";
+
 
 export default function DashboardApplicant() {
   let [title, setTitle] = useState("");
   let [desc, setDesc] = useState("");
   let [budget, setBudget] = useState("");
   let [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
-  let [userId, setUserId] = useState("");
+  let [ setUserId] = useState("");
 
   const navigate = useNavigate();
 

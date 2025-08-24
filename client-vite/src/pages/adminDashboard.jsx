@@ -5,7 +5,6 @@ import {
   get_admin_det_by_id,
   action_by_admin,
 } from "../controllers/admin";
-import "../styles/index.css";
 
 
 export default function DashboardAdmin() {
