@@ -1,14 +1,11 @@
 
-import Navbar from "../components/navbar";
 import "../styles/index.css";
 import aboutus from "../assets/images/aboutimg.png";
-import Footer from "../components/Footer";
-
 
 export default function About() {
   return (
     <>
-      <Navbar />
+    
 
       <div className="aboutbg h-screen p-16">
         {/* <img className="imgabout" src={about1} /> */}
@@ -28,7 +25,7 @@ export default function About() {
         </div>
       </div>
       <div className="position-fixed bottom-0"></div>
-      <Footer />
+    
     </>
   );
 }

@@ -1,7 +1,5 @@
 
-import Navbar from "../components/navbar";
 import "../styles/index.css";
-import Footer from "../components/Footer";
 import TeamCard from "../components/TeamCard";
 import logoDes from "../assets/images/logo-design.png";
 import graphicDes from "../assets/images/graphic-design.jpg";
@@ -12,7 +10,7 @@ import contentCreation from "../assets/images/content-creation.png";
 export default function Services() {
   return (
     <div className="h-screen">
-      <Navbar />
+  
       <div className="servicesbg p-16">
         <div className="title text-left pt-16 text-4xl text-white">
           <h1 className="m-2 p-2 emph">Our Services</h1>
@@ -55,7 +53,7 @@ export default function Services() {
           />
         </div>
       </div>
-      <Footer />
+
     </div>
   );
 }

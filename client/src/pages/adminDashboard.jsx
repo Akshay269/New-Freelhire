@@ -1,6 +1,4 @@
 import { useEffect, useState } from "react";
-import Navbar from "../components/navbar";
-
 import {
   auth_admin,
   get_forms,
@@ -8,7 +6,7 @@ import {
   action_by_admin,
 } from "../controllers/admin";
 import "../styles/index.css";
-import Footer from "../components/Footer";
+
 
 export default function DashboardAdmin() {
   let [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false);
@@ -67,7 +65,7 @@ export default function DashboardAdmin() {
 
   return (
     <>
-      <Navbar />
+  
       <div className="dashbg p-16">
         <div className="userdetails bg-[#e6e6e6] rounded-lg shadow-2xl p-16 ml-10 mr-10 mt-20">
           <h1 className="text-4xl m-2 p-2 text-black">
@@ -255,7 +253,7 @@ export default function DashboardAdmin() {
           <>You are not logged in</>
         )}
       </div>
-      <Footer />
+     
     </>
   );
 }

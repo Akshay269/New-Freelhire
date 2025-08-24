@@ -1,6 +1,4 @@
 import { useEffect, useState } from "react";
-import Navbar from "../components/navbar";
-import Footer from "../components/Footer";
 import { useNavigate } from "react-router-dom";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 
@@ -123,8 +121,6 @@ const handleChange = async (e) => {
 
   return (
     <>
-      <Navbar />
-
       <PayPalScriptProvider
         options={{
           "client-id":
@@ -315,8 +311,6 @@ const handleChange = async (e) => {
           )}
         </div>
       </PayPalScriptProvider>
-
-      <Footer />
     </>
   );
 }

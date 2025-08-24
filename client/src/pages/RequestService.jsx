@@ -1,5 +1,4 @@
 import  { useEffect, useState } from "react";
-import Navbar from "../components/navbar";
 import { useNavigate } from "react-router-dom";
 
 import { auth_user, submit_form } from "../controllers/user";
@@ -53,7 +52,7 @@ export default function DashboardApplicant() {
 
   return (
     <>
-      <Navbar />
+   
       <div className="dashbg p-16">
         <div className="userdetails bg-[#e6e6e6] rounded-lg shadow-2xl p-14 ml-8 mr-10 mt-20">
           <div className="text-5xl text-center">What Service do you need?</div>

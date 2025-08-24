@@ -1,8 +1,6 @@
 import  { useState } from "react";
 import "../styles/signup.css";
-import Navbar from "../components/navbar";
 import about1 from "../assets/images/about1.svg";
-import Footer from "../components/Footer";
 import {  useNavigate } from "react-router-dom";
 import { login_admin } from "../controllers/admin";
 import { login_user } from "../controllers/user";
@@ -87,7 +85,6 @@ export default function Signup() {
 
   return (
     <>
-      <Navbar />
       <img className="imgabout absolute" alt="signup" src={about1} />
       <div className="w-full h-screen bg-cover bg-center flex justify-center items-center px-4 bg-[#c7cacd]">
         <div className="main z-1 mt-32">
@@ -214,7 +211,6 @@ export default function Signup() {
           </div>
         </div>
       </div>
-      <Footer />
     </>
   );
 }

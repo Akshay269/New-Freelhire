@@ -1,17 +1,20 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Home from "../pages/Home";
-import About from "../pages/About";
-import Team from "../pages/Team";
-import Services from "../pages/Services";
-import Signup from "../pages/Signup";
-import UserDashboard from "../pages/userDashboard";
-import AdminDashboard from "../pages/adminDashboard";
-import RequestService from "../pages/RequestService";
+import Home from "./pages/Home";
+import About from "./pages/About";
+import Team from "./pages/Team";
+import Services from "./pages/Services";
+import Signup from "./pages/Signup";
+import UserDashboard from "./pages/userDashboard";
+import AdminDashboard from "./pages/adminDashboard";
+import RequestService from "./pages/RequestService";
+import Navbar from "./components/navbar";
+import Footer from "./components/Footer";
 
-export default function Router() {
+export default function App() {
   return (
     <>
       <BrowserRouter>
+        <Navbar />
         <Routes>
           <Route exact path="/" element={<Home />} />
           <Route exact path="/about" element={<About />} />
@@ -21,8 +24,9 @@ export default function Router() {
           <Route exact path="/userdashboard" element={<UserDashboard />} />
           <Route exact path="/admindashboard" element={<AdminDashboard />} />
           <Route exact path="/requestservice" element={<RequestService />} />
-          {/* <Route exact path="/payment" element={<ProductDisplay />}></Route> */}
+         
         </Routes>
+        <Footer />
       </BrowserRouter>
     </>
   );
